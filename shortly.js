@@ -3,7 +3,6 @@ var util = require('./lib/utility');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
 
-
 var db = require('./app/config');
 var Users = require('./app/collections/users');
 var User = require('./app/models/user');
@@ -20,13 +19,18 @@ app.use(partials());
 app.use(bodyParser.json());
 // Parse forms (signup/login)
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(util.checkLogin);
 app.use(express.static(__dirname + '/public'));
-
 
 app.get('/', 
 function(req, res) {
   res.render('index');
 });
+
+app.get('/login',
+function(req, res) {
+  res.render('login');
+})
 
 app.get('/create', 
 function(req, res) {
