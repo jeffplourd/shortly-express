@@ -59,7 +59,7 @@ describe('', function() {
       });
   });
 
-  describe('Link creation:', function(){
+  xdescribe('Link creation:', function(){
 
     var requestWithSession = request.defaults({jar: true});
 
@@ -101,7 +101,7 @@ describe('', function() {
       });
     });
 
-    describe('Shortening links:', function(){
+    xdescribe('Shortening links:', function(){
 
       var options = {
         'method': 'POST',
@@ -150,7 +150,7 @@ describe('', function() {
 
     }); // 'Shortening links'
 
-    describe('With previously saved urls:', function(){
+    xdescribe('With previously saved urls:', function(){
 
       var link;
 
@@ -291,11 +291,23 @@ describe('', function() {
     var requestWithSession = request.defaults({jar: true});
 
     beforeEach(function(done){
-      new User({
+      // new User({
+      //     'username': 'Phillip',
+      //     'password': 'Phillip'
+      // }).save().then(function(){
+      //   done()
+      // });
+
+      var options = {
+        'method': 'POST',
+        'uri': 'http://127.0.0.1:4568/signup',
+        'json': {
           'username': 'Phillip',
           'password': 'Phillip'
-      }).save().then(function(){
-        done()
+        }
+      };
+      request(options, function(error, res, body) {
+        done();
       });
     })
 

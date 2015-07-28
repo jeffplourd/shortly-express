@@ -24,9 +24,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(cookieParser());
 app.use(session({
   secret: 'the cat has no whiskers',
-  cookie: {
-    maxAge: 10000
-  }
+  // cookie: {
+  //   maxAge: 10000
+  // }
 }));
 app.use(util.checkLogin);
 app.use(express.static(__dirname + '/public'));
@@ -107,7 +107,17 @@ function(req, res) {
   util.createOrFind(req, res);
 });
 
+app.get('/logout',
+function(req, res) {
+  req.session.destroy();
+  res.redirect('/login');
+});
 
+app.post('/logout',
+function(req, res) {
+  req.session.destroy();
+  res.redirect('/login');
+});
 
 /************************************************************/
 // Handle the wildcard route last - if all other routes fail
