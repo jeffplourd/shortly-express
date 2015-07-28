@@ -2,6 +2,8 @@ var express = require('express');
 var util = require('./lib/utility');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
+//var cookieParser = require('cookie-parser');
+var session = require('express-session')
 
 var db = require('./app/config');
 var Users = require('./app/collections/users');
@@ -19,6 +21,13 @@ app.use(partials());
 app.use(bodyParser.json());
 // Parse forms (signup/login)
 app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(cookieParser());
+app.use(session({
+  secret: 'the cat has no whiskers',
+  cookie: {
+    maxAge: 10000
+  }
+}));
 app.use(util.checkLogin);
 app.use(express.static(__dirname + '/public'));
 
@@ -27,11 +36,6 @@ function(req, res) {
   res.render('index');
 });
 
-app.get('/login',
-function(req, res) {
-  res.render('login');
-})
-
 app.get('/create', 
 function(req, res) {
   res.render('index');
@@ -39,6 +43,7 @@ function(req, res) {
 
 app.get('/links', 
 function(req, res) {
+  console.log("trying to get links");
   Links.reset().fetch().then(function(links) {
     res.send(200, links.models);
   });
@@ -81,6 +86,26 @@ function(req, res) {
 /************************************************************/
 // Write your authentication routes here
 /************************************************************/
+
+app.get('/login',
+function(req, res) {
+  res.render('login');
+});
+
+app.post('/login',
+function(req, res) {
+  util.loginUser(req, res);
+});
+
+app.get('/signup',
+function(req, res) {
+  res.render('signup');
+});
+
+app.post('/signup',
+function(req, res) {
+  util.createOrFind(req, res);
+});
 
 
 
